@@ -714,6 +714,16 @@ def send_telegram_briefing(df: pd.DataFrame, target_date: str) -> None:
         timeout=15,
     )
     resp.raise_for_status()
+    resp.raise_for_status()
+    if CHART_PATH.exists():
+        with open(CHART_PATH, "rb") as img_f:
+            p_resp = requests.post(
+                f"https://api.telegram.org/bot{token}/sendPhoto",
+                data={"chat_id": chat_id, "caption": f"📈 AI GPU 30일 임대가격 추이 ({target_date})"},
+                files={"photo": img_f},
+                timeout=30,
+            )
+            p_resp.raise_for_status()
     print("[Telegram] Briefing sent successfully.")
 
 
